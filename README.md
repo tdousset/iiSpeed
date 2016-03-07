@@ -24,6 +24,7 @@ Step 5: `sudo vi /usr/local/lib/python2.7/dist-packages/speedtest_cli.py`
 
     import datetime
     import MySQLdb
+    
     class Database:
         host = 'localhost'
         user = 'iipython'
@@ -80,7 +81,6 @@ Step 11: `sudo vi /var/www/html/index.php`
     <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/highstock/4.2.3/highstock.js"></script>
     </head>
-
     <body>
 
     <div id="container" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
