@@ -87,9 +87,9 @@ Step 11: `sudo vi /var/www/html/index.php`
 
     <?php
     $servername = "localhost";
-    $username = "piread";
-    $password = "raspread";
-    $dbname = "iiNet";
+    $username = "iiphp";
+    $password = "password";
+    $dbname = "iiSpeed";
 
     // Create connection
     $conn = new mysqli($servername, $username, $password, $dbname);
