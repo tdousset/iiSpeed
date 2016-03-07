@@ -110,6 +110,7 @@ Step 11: `sudo vi /var/www/html/index.php`
 	    echo "0 results";
     }
     $conn->close();
+    
     $varping = rtrim($varping, ', ');
     $vardlspeed = rtrim($vardlspeed, ', ');
     $varulspeed = rtrim($varulspeed, ', ');
