@@ -115,7 +115,8 @@ Step 11: `sudo vi /var/www/html/index.php`
     $varulspeed = rtrim($varulspeed, ', ');
     ?>
 
-    <script> var chart = new Highcharts.StockChart({
+    <script>
+    var chart = new Highcharts.StockChart({
           chart: {
              renderTo: 'container'
           },
