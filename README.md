@@ -150,7 +150,7 @@ Step 11: `sudo vi /var/www/html/index.php`
              type: 'all',
              text: 'All'
           }],
-          selected: 6
+          selected: 2
           },
           series: [{
              name: 'Ping',
