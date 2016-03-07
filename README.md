@@ -2,26 +2,25 @@
 
 ### Prerequisite
 Step 1: Install Raspbian to your Raspberry Pi  
-Step 2: sudo apt-get update && sudo apt-get upgrade -y  
-Step 3: sudo apt-get install apache2 php5 libapache2-mod-php5 mysql-client mysql-server php5-mysql python-mysqldb -y  
-Step 4: sudo pip install speedtest-cli  
+Step 2: `sudo apt-get update && sudo apt-get upgrade -y` 
+Step 3: `sudo apt-get install apache2 php5 libapache2-mod-php5 mysql-client mysql-server php5-mysql python-mysqldb -y`  
+Step 4: `sudo pip install speedtest-cli`  
 
 ### MySQL
-Step 4: mysql -h localhost -u root -p  
-Step 5: CREATE DATABASE iiSpeed;  
-Step 6: CREATE USER ‘iipython’@’localhost’ IDENTIFIED BY ‘password’;  
-Step 7: GRANT ALL PRIVILEGES ON iiSpeed.* TO ‘iipython’@’localhost’;  
-Step 8: CREATE USER ‘iiphp’@’localhost’ IDENTIFIED BY ‘password’;  
-Step 9: GRANT SELECT ON iiSpeed.* TO ‘iiphp’@’localhost’;  
-Step 10: FLUSH PRIVILEGES;  
-Step 11: USE iiSpeed;  
-Step 12: CREATE TABLE data ( Date varchar(255), Ping varchar(255), DownSpeed varchar(255), UpSpeed varchar(255) );  
-Step 13: QUIT;  
+Step 4: `mysql -h localhost -u root -p` 
+
+    CREATE DATABASE iiSpeed;  
+    CREATE USER ‘iipython’@’localhost’ IDENTIFIED BY ‘password’;  
+    GRANT ALL PRIVILEGES ON iiSpeed.* TO ‘iipython’@’localhost’;  
+    CREATE USER ‘iiphp’@’localhost’ IDENTIFIED BY ‘password’;  
+    GRANT SELECT ON iiSpeed.* TO ‘iiphp’@’localhost’;  
+    FLUSH PRIVILEGES;  
+    USE iiSpeed;  
+    CREATE TABLE data ( Date varchar(255), Ping varchar(255), DownSpeed varchar(255), UpSpeed varchar(255) );  
+    QUIT;  
 
 ### speedtest-cli
-Step 14: sudo vi /usr/local/lib/python2.7/dist-packages/speedtest_cli.py  
-
-------------------------------------------------------------------------
+Step 5: `sudo vi /usr/local/lib/python2.7/dist-packages/speedtest_cli.py`  
 
     import datetime
     import MySQLdb
@@ -58,29 +57,22 @@ Step 14: sudo vi /usr/local/lib/python2.7/dist-packages/speedtest_cli.py
 
     db.insert(query)
 
-------------------------------------------------------------------------
-
-Step 15: sudo chmod 775 /usr/local/lib/python2.7/dist-packages/speedtest_cli.py  
-Step 16: crontab -e  
-
-------------------------------------------------------------------------
+Step 6: `sudo chmod 775 /usr/local/lib/python2.7/dist-packages/speedtest_cli.py`  
+Step 7: `crontab -e`  
 
     */20 * * * * /usr/local/lib/python2.7/dist-packages/speedtest_cli.py
 
-------------------------------------------------------------------------
-
 ### Verify (Wait 1 hour)
-Step 17: crontab -l  
-Step 18: mysql -h localhost -u iiphp -p  
-Step 19: USE iiSpeed;  
-Step 20: SELECT * FROM data;  
-Step 21: QUIT;  
+Step 8: `crontab -l`  
+Step 9: `mysql -h localhost -u iiphp -p`  
+
+    USE iiSpeed;  
+    SELECT * FROM data;  
+    QUIT;  
 
 ### Webpage
-Step 22: sudo mv /var/www/html/index.html /var/www/html/index.html.old  
-Step 23: sudo vi /var/www/html/index.php  
-
-------------------------------------------------------------------------
+Step 10: `sudo mv /var/www/html/index.html /var/www/html/index.html.old`  
+Step 11: `sudo vi /var/www/html/index.php`  
 
     <html>
     <head>
@@ -175,5 +167,3 @@ Step 23: sudo vi /var/www/html/index.php
 
     </body>
     </html>
-
-------------------------------------------------------------------------
