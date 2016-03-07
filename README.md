@@ -48,7 +48,6 @@ Step 5: `sudo vi /usr/local/lib/python2.7/dist-packages/speedtest_cli.py`
     dlspeed = (dlspeed/1000/1000)*8
     ulspeed = (ulspeed/1000/1000)*8
     db = Database()
-
     query = """
         INSERT INTO data
         ('Date', 'Ping', 'DownSpeed', 'UpSpeed')
