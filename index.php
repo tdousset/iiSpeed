@@ -45,7 +45,7 @@ var chart = new Highcharts.StockChart({
          renderTo: 'container'
       },
       title: {
-         text: '2HAM Speedtest'
+         text: 'Speedtest'
       },
       xAxis: {
          type: 'datetime'
