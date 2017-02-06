@@ -64,15 +64,19 @@
 *Step 6:* `sudo chmod 775 /usr/local/lib/python2.7/dist-packages/speedtest_cli.py`  
 *Step 7:* `crontab -e`  
 
+```bash
     */20 * * * * /usr/local/lib/python2.7/dist-packages/speedtest_cli.py
+```
 
 ### Verify (Wait 1 hour)
 *Step 8:* `crontab -l`  
 *Step 9:* `mysql -h localhost -u iiphp -p`  
 
+```sql
     USE iiSpeed;  
     SELECT * FROM data;  
     QUIT;  
+```
 
 ### Webpage
 *Step 10:* `sudo mv /var/www/html/index.html /var/www/html/index.html.old`  
