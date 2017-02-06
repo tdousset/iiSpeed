@@ -1,14 +1,15 @@
 # iiSpeed
 
 ### Prerequisite
-Step 1: Install Raspbian on your Raspberry Pi  
-Step 2: `sudo apt-get update && sudo apt-get upgrade -y`  
-Step 3: `sudo apt-get install apache2 php5 libapache2-mod-php5 mysql-client mysql-server php5-mysql python-mysqldb -y`  
-Step 4: `sudo pip install speedtest-cli`  
+#Step 1:# Install Raspbian on your Raspberry Pi  
+#Step 2:# `sudo apt-get update && sudo apt-get upgrade -y`  
+#Step 3:# `sudo apt-get install apache2 php5 libapache2-mod-php5 mysql-client mysql-server php5-mysql python-mysqldb -y`  
+#Step 4:# `sudo pip install speedtest-cli`  
 
 ### MySQL
-Step 4: `mysql -h localhost -u root -p` 
+#Step 4:# `mysql -h localhost -u root -p` 
 
+```sql
     CREATE DATABASE iiSpeed;  
     CREATE USER ‘iipython’@’localhost’ IDENTIFIED BY ‘password’;  
     GRANT ALL PRIVILEGES ON iiSpeed.* TO ‘iipython’@’localhost’;  
@@ -18,10 +19,12 @@ Step 4: `mysql -h localhost -u root -p`
     USE iiSpeed;  
     CREATE TABLE data ( Date varchar(255), Ping varchar(255), DownSpeed varchar(255), UpSpeed varchar(255) );  
     QUIT;  
+```
 
 ### speedtest-cli
-Step 5: `sudo vi /usr/local/lib/python2.7/dist-packages/speedtest_cli.py`  
+#Step 5:# `sudo vi /usr/local/lib/python2.7/dist-packages/speedtest_cli.py`  
 
+```python
     import datetime
     import MySQLdb
     
@@ -56,29 +59,31 @@ Step 5: `sudo vi /usr/local/lib/python2.7/dist-packages/speedtest_cli.py`
         """ % (best['latency'], dlspeed, ulspeed)
 
     db.insert(query)
+```
 
-Step 6: `sudo chmod 775 /usr/local/lib/python2.7/dist-packages/speedtest_cli.py`  
-Step 7: `crontab -e`  
+#Step 6:# `sudo chmod 775 /usr/local/lib/python2.7/dist-packages/speedtest_cli.py`  
+#Step 7:# `crontab -e`  
 
     */20 * * * * /usr/local/lib/python2.7/dist-packages/speedtest_cli.py
 
 ### Verify (Wait 1 hour)
-Step 8: `crontab -l`  
-Step 9: `mysql -h localhost -u iiphp -p`  
+#Step 8:# `crontab -l`  
+#Step 9:# `mysql -h localhost -u iiphp -p`  
 
     USE iiSpeed;  
     SELECT * FROM data;  
     QUIT;  
 
 ### Webpage
-Step 10: `sudo mv /var/www/html/index.html /var/www/html/index.html.old`  
-Step 11: `sudo vi /var/www/html/index.php`  
+#Step 10:# `sudo mv /var/www/html/index.html /var/www/html/index.html.old`  
+#Step 11:# `sudo vi /var/www/html/index.php`  
 
+```php
     <html>
     <head>
     <title>iiSpeed</title>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js"></script>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/highstock/4.2.3/highstock.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/highstock/5.0.7/highstock.js"></script>
     </head>
     <body>
 
@@ -168,3 +173,4 @@ Step 11: `sudo vi /var/www/html/index.php`
 
     </body>
     </html>
+```
