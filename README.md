@@ -26,8 +26,8 @@ Step 1: `mysql -h localhost -u root -p`
 
 ### speedtest-cli
 Step 1: `sudo mkdir /usr/local/sbin/iiSpeed && cp speedtest_cli.py /usr/local/sbin/iiSpeed/`
-Step 2: `sudo chmod 775 /usr/local/sbin/iiSpeed/cron_speedtest_cli.py`
-Step 3: `sudo echo '*/20 * * * * root /usr/local/sbin/iiSpeed/cron_speedtest_cli.py' > /etc/cron.d/iispeed_cron`
+Step 2: `sudo chmod 775 /usr/local/sbin/iiSpeed/speedtest_cli.py`
+Step 3: `sudo echo '*/20 * * * * root /usr/local/sbin/iiSpeed/speedtest_cli.py' > /etc/cron.d/iispeed_cron`
 
 ### Verify (Wait 1 hour)
 Step 1: `mysql -h localhost -u iiSpeed -p`
