@@ -1,180 +1,56 @@
 # iiSpeed
 
 ### Prerequisite
-*Step 1:* Install Raspbian on your Raspberry Pi  
-*Step 2:* `sudo apt-get update && sudo apt-get upgrade -y`  
-*Step 3:* `sudo apt-get install apache2 php5 libapache2-mod-php5 mysql-client mysql-server php5-mysql python-mysqldb -y`  
-*Step 4:* `sudo pip install speedtest-cli`  
+
+Debian/Ubuntu users:
+
+Step 1: `sudo apt-get update && sudo apt-get upgrade -y`
+
+Step 2: `sudo apt-get install apache2 php5 libapache2-mod-php5 mysql-client mysql-server php5-mysql python-mysqldb -y`
+
+Step 3: `sudo pip install speedtest-cli`
+
+CentOS 7 users:
+
+Step 1: `yum install httpd mariadb-server mariadb-libs php-mysql php-cli python2-pip -y`
+
+Step 2: `systemctl enable httpd mariadb && systemctl start httpd mariadb`
+
+Step 3: Follow secure install guide for MariaDB here: https://mariadb.com/kb/en/mariadb/mysql_secure_installation/
 
 ### MySQL
-*Step 4:* `mysql -h localhost -u root -p` 
 
-```sql
+Step 1: `mysql -h localhost -u root -p` 
+
     CREATE DATABASE iiSpeed;  
-    CREATE USER ‘iipython’@’localhost’ IDENTIFIED BY ‘password’;  
-    GRANT ALL PRIVILEGES ON iiSpeed.* TO ‘iipython’@’localhost’;  
-    CREATE USER ‘iiphp’@’localhost’ IDENTIFIED BY ‘password’;  
-    GRANT SELECT ON iiSpeed.* TO ‘iiphp’@’localhost’;  
-    FLUSH PRIVILEGES;  
-    USE iiSpeed;  
-    CREATE TABLE data ( Date varchar(255), Ping varchar(255), DownSpeed varchar(255), UpSpeed varchar(255) );  
-    QUIT;  
-```
+    CREATE USER 'iiSpeed'@'localhost' IDENTIFIED BY 'password'; 
+    GRANT ALL PRIVILEGES ON iiSpeed.* TO 'iiSpeed'@'localhost'; 
+    CREATE USER 'iiSpeed'@'localhost' IDENTIFIED BY 'password';
+    GRANT SELECT ON iiSpeed.* TO 'iiSpeed'@'localhost';
+    FLUSH PRIVILEGES;
+    USE iiSpeed;
+    CREATE TABLE data ( Date varchar(255), Ping varchar(255), DownSpeed varchar(255), UpSpeed varchar(255) );
+    QUIT;
 
 ### speedtest-cli
-*Step 5:* `sudo vi /usr/local/lib/python2.7/dist-packages/speedtest_cli.py`  
 
-```python
-    import datetime
-    import MySQLdb
-    
-    class Database:
-        host = 'localhost'
-        user = 'iipython'
-        password = 'password'
-        db = 'iiSpeed'
-    
-        def __init__(self):
-            self.connection = MySQLdb.connect(self.host, self.user, self.password, self.db)
-            self.cursor = self.connection.cursor()
-    
-        def insert(self, query):
-            try:
-                self.cursor.execute(query)
-                self.connection.commit()
-            except:
-                self.connection.rollback()
-    
-        def __del__(self):
-            self.connection.close()
+Step 1: `sudo mkdir /usr/local/sbin/iiSpeed && cp speedtest_cli.py /usr/local/sbin/iiSpeed/`
 
-    dlspeed = (dlspeed/1000/1000)*8
-    ulspeed = (ulspeed/1000/1000)*8
-    db = Database()
-    query = """
-        INSERT INTO data
-        ('Date', 'Ping', 'DownSpeed', 'UpSpeed')
-        VALUES
-        (NOW(), %f, %f, %f)
-        """ % (best['latency'], dlspeed, ulspeed)
+Step 2: `sudo chmod 775 /usr/local/sbin/iiSpeed/speedtest_cli.py`
 
-    db.insert(query)
-```
-
-*Step 6:* `sudo chmod 775 /usr/local/lib/python2.7/dist-packages/speedtest_cli.py`  
-*Step 7:* `crontab -e`  
-
-```bash
-    */20 * * * * /usr/local/lib/python2.7/dist-packages/speedtest_cli.py
-```
+Step 3: `sudo echo '*/20 * * * * root /usr/local/sbin/iiSpeed/speedtest_cli.py' > /etc/cron.d/iispeed_cron`
 
 ### Verify (Wait 1 hour)
-*Step 8:* `crontab -l`  
-*Step 9:* `mysql -h localhost -u iiphp -p`  
 
-```sql
-    USE iiSpeed;  
-    SELECT * FROM data;  
-    QUIT;  
-```
+Step 1: `mysql -h localhost -u iiSpeed -p`
+
+    USE iiSpeed;
+    SELECT * FROM data;
+    QUIT;
 
 ### Webpage
-*Step 10:* `sudo mv /var/www/html/index.html /var/www/html/index.html.old`  
-*Step 11:* `sudo vi /var/www/html/index.php`  
 
-```php
-    <html>
-    <head>
-    <title>iiSpeed</title>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/highstock/5.0.7/highstock.js"></script>
-    </head>
-    <body>
+Step 1: `sudo mkdir /var/www/html/iispeed && mv index.php /var/www/html/iispeed/`
 
-    <div id="container" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
-
-    <?php
-    $servername = "localhost";
-    $username = "iiphp";
-    $password = "password";
-    $dbname = "iiSpeed";
-
-    // Create connection
-    $conn = new mysqli($servername, $username, $password, $dbname);
-    // Check connection
-    if ($conn->connect_error) {
-	    die("Connection failed: " . $conn->connect_error);
-    }
-
-    $sql = "SELECT * FROM data";
-    $result = $conn->query($sql); if ($result->num_rows > 0) {
-	    // output data of each row
-	    while($row = $result->fetch_assoc()) {
-		    $varping .= "[". (strtotime($row["Date"]) * 1000). ", ". $row["Ping"]. "], ";
-		    $vardlspeed .= "[". (strtotime($row["Date"]) * 1000). ", ". $row["DownSpeed"]. "], ";
-		    $varulspeed .= "[". (strtotime($row["Date"]) * 1000). ", ". $row["UpSpeed"]. "], ";
-	    }
-    } else {
-	    echo "0 results";
-    }
-    $conn->close();
-    
-    $varping = rtrim($varping, ', ');
-    $vardlspeed = rtrim($vardlspeed, ', ');
-    $varulspeed = rtrim($varulspeed, ', ');
-    ?>
-
-    <script>
-    var chart = new Highcharts.StockChart({
-          chart: {
-             renderTo: 'container'
-          },
-          title: {
-             text: 'Speedtest'
-          },
-          xAxis: {
-             type: 'datetime'
-          },
-          rangeSelector: {
-          buttons: [{
-             type: 'hour',
-             count: 6,
-             text: '6h'
-          }, {
-             type: 'day',
-             count: 1,
-             text: '1d'
-          }, {
-             type: 'day',
-             count: 3,
-             text: '3d'
-          }, {
-             type: 'day',
-             count: 7,
-             text: '1w'
-          }, {
-             type: 'month',
-             count: 1,
-             text: '1m'
-          }, {
-             type: 'all',
-             text: 'All'
-          }],
-          selected: 2
-          },
-          series: [{
-             name: 'Ping',
-             data: [<?php echo "$varping" ?>]
-          }, {
-             name: 'Download Speed',
-             data: [<?php echo "$vardlspeed" ?>]
-          }, {
-             name: 'Upload Speed',
-             data: [<?php echo "$varulspeed" ?>]
-          }]
-    });
-    </script>
-
-    </body>
-    </html>
-```
+Step 2: Copy your MySQL password for iiSpeed user:
+        `sudo vi /var/www/html/iispeed/index.php`

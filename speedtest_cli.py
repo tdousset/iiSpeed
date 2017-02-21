@@ -550,7 +550,7 @@ def version():
 
 class Database:
     host = 'localhost'
-    user = 'iipython'
+    user = 'iiSpeed'
     password = 'password'
     db = 'iiSpeed'
 
@@ -811,11 +811,10 @@ def speedtest():
     db = Database()
     query = """
         INSERT INTO data
-        ('Date', 'Ping', 'DownSpeed', 'UpSpeed')
+        (Date,Ping,DownSpeed,UpSpeed)
         VALUES
         (NOW(), %f, %f, %f)
         """ % (best['latency'], dlspeed, ulspeed)
-    
     db.insert(query)
 
 

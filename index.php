@@ -1,8 +1,8 @@
 <html>
 <head>
 <title>iiSpeed</title>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/highstock/5.0.7/highstock.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highstock/4.2.6/highstock.js"></script>
 </head>
 <body>
 
